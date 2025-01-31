@@ -1,0 +1,65 @@
+[project]
+name = "mlx-dev-server"
+version = "0.1.1"
+description = "A server to run MLX models locally, optimized for code completion"
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+keywords = ["code completion", "llm", "local copilot", "mlx server"]
+authors = [
+    {name = "Andrey Usenok"},
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: GPU",
+    "Environment :: MacOS X",
+    "Framework :: aiohttp",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: Implementation :: CPython",
+]
+dependencies = [
+    "aiohttp>=3.11.12",
+    "colorlog>=6.9.0",
+    "huggingface-hub>=0.29.1",
+    "mlx-lm>=0.21.4; sys_platform == 'darwin' and platform_machine == 'arm64' and python_version >= '3.8' and platform_release >= '22.6.0'",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3.4",
+    "pytest-aiohttp>=1.1.0",
+    "pytest-cov>=6.0.0",
+    "pytest-unordered>=0.6.1",
+]
+
+[project.scripts]
+mlx_dev_server = "mlx_dev_server.cli.server:main"
+
+[project.urls]
+Repository = "https://github.com/toogle/mlx-dev-server"
+Issues = "https://github.com/toogle/mlx-dev-server/issues"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.sdist]
+only-include = [
+    "src/mlx_dev_server",
+    "tests",
+    "uv.lock",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/mlx_dev_server"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+addopts = [
+    "--import-mode=importlib",
+]
