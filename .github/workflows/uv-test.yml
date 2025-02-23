@@ -1,0 +1,27 @@
+name: Deploy Quartz site to GitHub Pages
+on:
+  push:
+    branches:
+      - main
+ 
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: macos-13-xlarge
+    strategy:
+      matrix:
+        python-version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v4
+
+      - name: Install the latest version of uv and set the python version
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: false
+          python-version: ${{ matrix.python-version }}
+
+      - name: Test with python ${{ matrix.python-version }}
+        run: uv run --frozen pytest
